@@ -33,8 +33,17 @@ jobs:
       run: |
         COVERAGE_THRESHOLD=70
         ACTUAL_COVERAGE=$(cat coverage/lcov-report/index.html | grep "data-statements" | awk -F'>' '{print $2}' | awk -F'%' '{print $1}')
-
-        if [ $ACTUAL_COVERAGE -lt $COVERAGE_THRESHOLD ]; then
+        if [ -z "$ACTUAL_COVERAGE" ]; then
+          echo "Error: ACTUAL_COVERAGE is not set"
+          exit 1
+        fi
+        
+        if [ -z "$COVERAGE_THRESHOLD" ]; then
+          echo "Error: COVERAGE_THRESHOLD is not set"
+          exit 1
+        fi
+        
+        if [ "$ACTUAL_COVERAGE" -lt "$COVERAGE_THRESHOLD" ]; then
           echo "Code coverage is below the required threshold ($ACTUAL_COVERAGE% < $COVERAGE_THRESHOLD%)"
           exit 1
         else
