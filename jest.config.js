@@ -1,5 +1,3 @@
-module.exports = {
-  testEnvironment: 'node',
-  collectCoverage: true,
-  coverageDirectory: 'coverage',
-};
+export const testEnvironment = 'node';
+export const collectCoverage = true;
+export const coverageDirectory = 'coverage';
