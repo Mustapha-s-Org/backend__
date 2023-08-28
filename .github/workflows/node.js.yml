@@ -28,11 +28,12 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm install
-    - run: npm test -- --coverage
+    - run: npm test -- --coverage --coverageReporters="json-summary" 
     - name: Check code coverage
       run: |
+        sudo apt-get install -y jq
         COVERAGE_THRESHOLD=70
-        ACTUAL_COVERAGE=$(cat coverage/lcov-report/index.html | grep "data-statements" | awk -F'>' '{print $2}' | awk -F'%' '{print $1}')
+        ACTUAL_COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
         if [ -z "$ACTUAL_COVERAGE" ]; then
           echo "Error: ACTUAL_COVERAGE is not set"
           exit 1
