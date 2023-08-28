@@ -28,7 +28,18 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm install
-    - run: npm test
+    - run: npm test -- --coverage
+    - name: Check code coverage
+      run: |
+        COVERAGE_THRESHOLD=70
+        ACTUAL_COVERAGE=$(cat coverage/lcov-report/index.html | grep "data-statements" | awk -F'>' '{print $2}' | awk -F'%' '{print $1}')
+
+        if [ $ACTUAL_COVERAGE -lt $COVERAGE_THRESHOLD ]; then
+          echo "Code coverage is below the required threshold ($ACTUAL_COVERAGE% < $COVERAGE_THRESHOLD%)"
+          exit 1
+        else
+          echo "Code coverage is acceptable ($ACTUAL_COVERAGE% >= $COVERAGE_THRESHOLD%)"
+        fi
 
   deploy:
     name: Deploy
