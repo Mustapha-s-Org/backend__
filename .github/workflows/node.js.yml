@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build and tests
     runs-on: ubuntu-latest
 
     strategy:
@@ -28,13 +28,6 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm install
-    
-  tests:
-    name: Test
-    needs: [build]
-    runs-on: ubuntu-latest
-
-    steps: 
     - run: npm test -- --coverage --coverageReporters="json-summary" 
     - name: Check code coverage
       run: |
@@ -58,6 +51,12 @@ jobs:
           echo "Code coverage is acceptable ($ACTUAL_COVERAGE% >= $COVERAGE_THRESHOLD%)"
         fi
 
+  tests:
+    name: Dependency Check
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps: 
     - name: Dependency Check
       uses: actions/dependency-review-action@v3.0.8
       
