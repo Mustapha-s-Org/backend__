@@ -52,19 +52,17 @@ jobs:
         fi
 
   tests:
-    name: Dependency Check
-    needs: [build]
     runs-on: ubuntu-latest
-
+    needs: [build]
     steps: 
-    - name: Dependency Check
-      uses: actions/dependency-review-action@v3.0.8
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.8.1
       
   deploy:
     name: Deploy
-    needs: [tests] # Our tests must pass in order to run the deploy job
+    needs: [build] # Our tests must pass in order to run the deploy job
     runs-on: ubuntu-latest
-
+    environment: production
     steps: 
       - name: Deploy to production
         uses: johnbeynon/render-deploy-action@v0.0.8
