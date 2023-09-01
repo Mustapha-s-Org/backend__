@@ -1,4 +1,4 @@
-// TODO DB SETUP
+//TODO DB SETUP
 import mongoose from 'mongoose'
 
 const connectDB = async () => {
@@ -15,4 +15,7 @@ const connectDB = async () => {
     }
 }
 
+const disconnectDB = () => { return mongoose.disconnect(); }
+
 export default connectDB
+export { disconnectDB } 
